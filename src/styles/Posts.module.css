@@ -1,0 +1,110 @@
+.posts {
+    margin-top: 20px;
+}
+
+.post {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.postHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.userName {
+    font-size: 16px;
+    color: #333;
+}
+
+.postActions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.actionButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #007bff;
+    transition: color 0.3s ease;
+}
+
+.actionButton:hover {
+    color: #0056b3;
+}
+
+.postBody {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.postPhoto {
+    width: 50%; /* Adjust this value to make the photo smaller */
+    height: auto;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    margin-right: 20px; /* Add some space between the photo and the content */
+}
+
+.postContent {
+    font-size: 22px;
+    color: #666;
+    margin-bottom: 10px;
+    flex: 1; /* Allow the content to take up the remaining space */
+}
+
+.postFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.postFooterLeft {
+    display: flex;
+    gap: 10px;
+}
+
+.comments {
+    margin-top: 20px;
+}
+
+.comments h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.comment {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.commentContent {
+    font-size: 16px;
+    color: #666;
+}
