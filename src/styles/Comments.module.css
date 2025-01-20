@@ -1,0 +1,36 @@
+.comments {
+    margin-top: 20px;
+}
+
+.comments h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.comment {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.avatar {
+    width: 40px; /* Smaller size for comment avatars */
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.userName {
+    font-size: 16px;
+    color: #333;
+}
+
+.commentContent {
+    font-size: 16px;
+    color: #666;
+}

@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FaHome } from 'react-icons/fa';
 import styles from '../styles/Header.module.css';
 import userAvatar from '../assets/avatar.png';
 
 const Header: React.FC = () => {
     const userLoggedIn = true; // Change this based on your authentication logic
-    const userName = "John Doe"; // Replace with actual user name
+    const userName = "Yotam Gat"; // Replace with actual user name
     const userId = "1"; // Replace with actual user ID
 
     return (
@@ -14,6 +15,9 @@ const Header: React.FC = () => {
                 <h1>Res Blog</h1>
             </div>
             <div className={styles.right}>
+                <Link to="/" className={styles.homeButton}>
+                    <FaHome />
+                </Link>
                 {userLoggedIn ? (
                     <>
                         <Link to={`/profile/${userId}`} className={styles.userLink}>

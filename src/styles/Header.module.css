@@ -11,6 +11,17 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1000; /* Ensure the header is above other content */
 }
+.homeButton {
+    font-size: 2rem; /* Adjust the size as needed */
+    padding: 5px;   /* Adjust the padding as needed */
+    margin-right: 10px;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+}
+
 
 .left h1 {
     margin: 0;
@@ -47,7 +58,7 @@
 }
 
 .userName {
-    font-size: 16px;
+    font-size: 20px;
     color: #333;
     margin-right: 10px;
 }
