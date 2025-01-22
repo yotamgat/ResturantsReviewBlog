@@ -1,80 +1,88 @@
 import React, { useState } from 'react';
-import { FaThumbsUp, FaComment,FaEdit,FaTrash } from 'react-icons/fa';
+import { usePosts } from '../hooks/usePosts';
+import { FaThumbsUp, FaComment, FaEdit, FaTrash } from 'react-icons/fa';
 import styles from '../styles/Posts.module.css';
 import Comments from '../pages/Comments';
-import { Post, posts as initialPosts } from '../data/PostsTest';
 
-interface PostsProps {
-    posts?: Post[]; // Optional posts array
-}
-
-const Posts: React.FC<PostsProps> = ({ posts }) => {
-  
-    const [allPosts] = useState<Post[]>(initialPosts);
-    const displayedPosts = posts || allPosts;
-    const loggedOwnerId: number = 1; // Replace with actual logged in user ID
+const Posts: React.FC = () => {
+    const { posts, loading, error, handleLike, handleEdit } = usePosts();
+    const loggedOwnerId = 1; // Replace with actual logged-in user ID
     const [showComments, setShowComments] = useState<{ [key: number]: boolean }>({});
+    const [editingPostId, setEditingPostId] = useState<number | null>(null);
+    const [newContent, setNewContent] = useState<string>('');
 
-    const handleDelete = (id: number) => {
-       // setPosts(posts.filter(post => post.postId !== id));
-    };
-
-    const handleLike = (id: number) => {
-        // Implement like functionality
-    };
-
-    const handleEdit = (id: number) => {
-        // Implement edit functionality
-    };
-
-  
     const handleComment = (id: number) => {
         setShowComments(prevState => ({
             ...prevState,
-            [id]: !prevState[id]
+            [id]: !prevState[id],
         }));
     };
 
+    const handleSaveEdit = async (postId: number) => {
+        await handleEdit(postId, newContent);
+        setEditingPostId(null); // Exit edit mode
+    };
+
+    if (loading) return <div>Loading posts...</div>;
+    if (error) return <div>{error}</div>;
+
     return (
         <div className={styles.posts}>
-        {displayedPosts.map(post => (
-            <div key={post.postId} className={styles.post}>
-                <div className={styles.postHeader}>
-                    <img src={post.userAvatar} alt="User Avatar" className={styles.avatar} />
-                    <span className={styles.userName}>{post.userName}</span>
-                </div>
-                <div className={styles.postBody}>
-                    <img src={post.photo} alt="Post" className={styles.postPhoto} />
-                    <p className={styles.postContent}>{post.content}</p>
-                </div>
-                <div className={styles.postFooter}>
-                    <div className={styles.postFooterLeft}>
-                        <button onClick={() => handleLike(post.postId)} className={styles.actionButton}>
-                            <FaThumbsUp /> {post.numOfLikes}
-                        </button>
-                        <button onClick={() => handleComment(post.postId)} className={styles.actionButton}>
-                            <FaComment /> {post.numOfComments}
-                        </button>
+            {posts.map(post => (
+                <div key={post.postId} className={styles.post}>
+                    <div className={styles.postHeader}>
+                        <img src={post.userAvatar} alt="User Avatar" className={styles.avatar} />
+                        <span className={styles.userName}>{post.userName}</span>
                     </div>
-                    {loggedOwnerId === post.ownerId && (
-                        <div className={styles.postActions}>
-                            <button onClick={() => handleEdit(post.postId)} className={styles.actionButton}>
-                                <FaEdit />
+                    <div className={styles.postBody}>
+                        <img src={post.photo} alt="Post" className={styles.postPhoto} />
+                        {editingPostId === post.postId ? (
+                            <textarea
+                                value={newContent}
+                                onChange={e => setNewContent(e.target.value)}
+                                className={styles.editTextarea}
+                            />
+                        ) : (
+                            <p className={styles.postContent}>{post.content}</p>
+                        )}
+                    </div>
+                    <div className={styles.postFooter}>
+                        <div className={styles.postFooterLeft}>
+                            <button onClick={() => handleLike(post.postId)} className={styles.actionButton}>
+                                <FaThumbsUp /> {post.numOfLikes}
                             </button>
-                            <button onClick={() => handleDelete(post.postId)} className={styles.actionButton}>
-                                <FaTrash />
+                            <button onClick={() => handleComment(post.postId)} className={styles.actionButton}>
+                                <FaComment /> {post.numOfComments}
                             </button>
                         </div>
-                    )}
+                        {loggedOwnerId === post.ownerId && (
+                            <div className={styles.postActions}>
+                                {editingPostId === post.postId ? (
+                                    <button onClick={() => handleSaveEdit(post.postId)} className={styles.actionButton}>
+                                        Save
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() => {
+                                            setEditingPostId(post.postId);
+                                            setNewContent(post.content);
+                                        }}
+                                        className={styles.actionButton}
+                                    >
+                                        <FaEdit />
+                                    </button>
+                                )}
+                                <button className={styles.actionButton}>
+                                    <FaTrash />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                    {showComments[post.postId] && <Comments postId={post.postId} />}
                 </div>
-                {showComments[post.postId] && (
-                    <Comments postId={post.postId} />
-                )}
-            </div>
-        ))}
-    </div>
-);
+            ))}
+        </div>
+    );
 };
-
 
 export default Posts;

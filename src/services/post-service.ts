@@ -1,16 +1,19 @@
-//------------------------------------
-// This file contains all of the functions of posts from the server
-//------------------------------------
+import apiClient from './api-service';
 
-import apiClient,{CanceledError} from "./api-client"; 
-import { Post} from '../data/PostsTest';
+// Fetch all posts
+export const fetchPosts = async () => {
+    const response = await apiClient.get('/posts');
+    return response.data;
+};
 
-export {CanceledError} ;
+// Like a post
+export const likePost = async (postId: number) => {
+    const response = await apiClient.post(`/posts/${postId}/like`);
+    return response.data;
+};
 
-const getAllPosts = async (): Promise<Post[]> => {
-    const abortController= new AbortController(); // create an AbortController object to cancel the fetch request
-    const request=  apiClient.get<Post[]>("/posts", {signal:abortController.signal}) // send a get request to the server to get the posts
-    return {request,abort: ()=>abortController.abort()} // return the request and the abort function
-}
-
-export default { getAllPosts }
+// Edit a post
+export const editPost = async (postId: number, updatedContent: string) => {
+    const response = await apiClient.put(`/posts/${postId}`, { content: updatedContent });
+    return response.data;
+};
