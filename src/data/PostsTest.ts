@@ -33,7 +33,7 @@ export const posts: Post[] = [
         numOfLikes: 15,
     },
     {
-        ownerId: 3,
+        ownerId: 1,
         postId: 2,
         userName: 'John Doe',
         userAvatar: userAvatar,

@@ -50,7 +50,17 @@
 .editButton:hover {
     background-color: #0056b3;
 }
-
+.saveButton, .cancelButton {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.saveButton:hover, .cancelButton:hover {
+    background-color: #0056b3;
+}
 .userPosts {
     width: 80%; /* Make the right side larger */
     padding-left: 20px;

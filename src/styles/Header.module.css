@@ -11,22 +11,10 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1000; /* Ensure the header is above other content */
 }
-.homeButton {
-    font-size: 2rem; /* Adjust the size as needed */
-    padding: 5px;   /* Adjust the padding as needed */
-    margin-right: 10px;
-}
 
 .left {
     display: flex;
     align-items: center;
-}
-
-
-.left h1 {
-    margin: 0;
-    font-size: 24px;
-    color: #333;
 }
 
 .right {
@@ -34,32 +22,36 @@
     align-items: center;
 }
 
-.userLink {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: inherit;
+.homeButton {
+    margin-right: 20px;
+    font-size: 1.5rem;
 }
 
-.loginButton, .logoutButton {
+.newPostButton {
     padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
     background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 4px;
-    transition: background-color 0.3s ease;
-    margin-left: 10px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 20px;
 }
 
-.loginButton:hover, .logoutButton:hover {
+.newPostButton:hover {
     background-color: #0056b3;
 }
 
-.userName {
-    font-size: 20px;
+.userLink {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
     color: #333;
+    margin-right: 20px;
+}
+
+.userName {
     margin-right: 10px;
 }
 
@@ -67,5 +59,17 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    margin-right: 10px;
+}
+
+.logoutButton, .loginButton {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.logoutButton:hover, .loginButton:hover {
+    background-color: #0056b3;
 }

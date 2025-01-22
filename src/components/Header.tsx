@@ -4,7 +4,11 @@ import { FaHome } from 'react-icons/fa';
 import styles from '../styles/Header.module.css';
 import userAvatar from '../assets/avatar.png';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+    showNewPostButton?: boolean;
+}
+
+const Header: React.FC<HeaderProps> = ({ showNewPostButton })=> {
     const userLoggedIn = true; // Change this based on your authentication logic
     const userName = "Yotam Gat"; // Replace with actual user name
     const userId = "1"; // Replace with actual user ID
@@ -20,10 +24,16 @@ const Header: React.FC = () => {
                 </Link>
                 {userLoggedIn ? (
                     <>
+                        
                         <Link to={`/profile/${userId}`} className={styles.userLink}>
                             <span className={styles.userName}>{userName}</span>
                             <img src={userAvatar} alt="User Avatar" className={styles.avatar} />
                         </Link>
+                        {showNewPostButton && (
+                            <Link to="/new-post" className={styles.newPostButton}>
+                                New Post
+                            </Link>
+                        )}
                         <button className={styles.logoutButton}>Logout</button>
                     </>
                 ) : (
