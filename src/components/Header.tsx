@@ -27,7 +27,11 @@ const Header: React.FC = () => {
                         <button className={styles.logoutButton}>Logout</button>
                     </>
                 ) : (
-                    <button className={styles.loginButton}>Login</button>
+                    
+                    <Link to="/login" >
+                        <button className={styles.loginButton}>Login</button>
+                    </Link>
+                    
                 )}
             </div>
         </header>
