@@ -12,6 +12,7 @@ const Header: React.FC<HeaderProps> = ({ showNewPostButton })=> {
     const userLoggedIn = false; // Change this based on your authentication logic
     const userName = "Yotam Gat"; // Replace with actual user name
     const userId = "1"; // Replace with actual user ID
+    const isLogIn = !!localStorage.getItem('accessToken');
 
     return (
         <header className={styles.header}>
@@ -22,9 +23,8 @@ const Header: React.FC<HeaderProps> = ({ showNewPostButton })=> {
                 <Link to="/" className={styles.homeButton}>
                     <FaHome />
                 </Link>
-                {userLoggedIn ? (
+                {isLogIn ? (
                     <>
-                        
                         <Link to={`/profile/${userId}`} className={styles.userLink}>
                             <span className={styles.userName}>{userName}</span>
                             <img src={userAvatar} alt="User Avatar" className={styles.avatar} />

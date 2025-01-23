@@ -1,11 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import 'bootstrap/dist/css/bootstrap.css'
-import App from './App.tsx'
-//import BlogHome from './pages/BlogHome.tsx'
+import React from 'react';
+import ReactDOM from 'react-dom/client'; // Use the correct import for React 18
+import 'bootstrap/dist/css/bootstrap.css';
+import App from './App.tsx';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+const clientId ='419321215873-gta8asanva2i59gd177miubjdsa4t9bm.apps.googleusercontent.com';
+
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+
+root.render(
+    <GoogleOAuthProvider clientId={clientId}>
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    </GoogleOAuthProvider>
+);
