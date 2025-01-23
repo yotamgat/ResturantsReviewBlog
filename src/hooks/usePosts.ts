@@ -25,7 +25,7 @@ export const usePosts = () => {
                 setPosts(fetchedPosts);
             } catch (err) {
                 setError('Failed to fetch posts.');
-                console.error( err);
+                console.error( err)
             } finally {
                 setLoading(false);
             }

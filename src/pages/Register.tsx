@@ -1,19 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { useRegister } from '../hooks/useRegister';
 import styles from '../styles/Register.module.css'; // Assuming you have a CSS module for styles
 
 const Register: React.FC = () => {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
 
-    const handleRegister = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Implement registration functionality
-    };
+    const { username, email, password, confirmPassword, handleInputChange, handleRegister, error, success } =
+        useRegister();
 
     return (
         <div>
@@ -21,13 +16,16 @@ const Register: React.FC = () => {
             <div className={styles.registerContainer}>
                 <h2>Register</h2>
                 <form onSubmit={handleRegister} className={styles.registerForm}>
+                    {error && <p className={styles.error}>{error}</p>}
+                    {success && <p className={styles.success}>{success}</p>}
                     <div className={styles.formGroup}>
                         <label htmlFor="username">Username:</label>
                         <input
                             type="text"
                             id="username"
                             value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            onChange={handleInputChange}
+                            name="username"
                             required
                         />
                     </div>
@@ -37,7 +35,8 @@ const Register: React.FC = () => {
                             type="email"
                             id="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={handleInputChange}
+                            name="email"
                             required
                         />
                     </div>
@@ -47,7 +46,8 @@ const Register: React.FC = () => {
                             type="password"
                             id="password"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={handleInputChange}
+                            name="password"
                             required
                         />
                     </div>
@@ -57,11 +57,14 @@ const Register: React.FC = () => {
                             type="password"
                             id="confirmPassword"
                             value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            onChange={handleInputChange}
+                            name="confirmPassword"
                             required
                         />
                     </div>
-                    <button type="submit" className={styles.registerButton}>Register</button>
+                    <button type="submit" className={styles.registerButton}>
+                        Register
+                    </button>
                 </form>
                 <p className={styles.loginPrompt}>
                     Already have an account? <Link to="/login" className={styles.loginLink}>Login</Link>

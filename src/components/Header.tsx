@@ -9,7 +9,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ showNewPostButton })=> {
-    const userLoggedIn = true; // Change this based on your authentication logic
+    const userLoggedIn = false; // Change this based on your authentication logic
     const userName = "Yotam Gat"; // Replace with actual user name
     const userId = "1"; // Replace with actual user ID
 
