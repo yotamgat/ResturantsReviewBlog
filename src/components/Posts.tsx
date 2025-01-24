@@ -3,10 +3,16 @@ import { usePosts } from '../hooks/usePosts';
 import { FaThumbsUp, FaComment, FaEdit, FaTrash } from 'react-icons/fa';
 import styles from '../styles/Posts.module.css';
 import Comments from '../pages/Comments';
-import { useUserContext } from '../data/UserContext';
+import { Post } from '../hooks/usePosts';
 
-const Posts: React.FC = () => {
-    const { posts, loading, error, handleLike, handleEdit } = usePosts();
+export interface PostsProps {
+
+    posts?: Post[];
+
+}
+
+const Posts: React.FC<PostsProps> = ({posts}) => {
+    const {posts: allPosts, loading, error, handleLike, handleEdit } = usePosts();
     const loggedOwnerId = 1; // Replace with actual logged-in user ID
     const [showComments, setShowComments] = useState<{ [key: number]: boolean }>({});
     const [editingPostId, setEditingPostId] = useState<number | null>(null);
@@ -25,12 +31,14 @@ const Posts: React.FC = () => {
         setEditingPostId(null); // Exit edit mode
     };
 
+    const postsToRender = posts || allPosts; // Use the `posts` prop if passed, otherwise use `allPosts`
+
     if (loading) return <div>Loading posts...</div>;
     if (error) return <div>{error}</div>;
 
     return (
         <div className={styles.posts}>
-            {posts.map(post => (
+            {postsToRender.map((post) => (
                 <div key={post.postId} className={styles.post}>
                     {/* Post Header */}
                     <div className={styles.postHeader}>

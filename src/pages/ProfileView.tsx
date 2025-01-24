@@ -1,26 +1,46 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import styles from '../styles/ProfileView.module.css';
-import userAvatar from '../assets/avatar.png'; // Adjust the path as needed
-import { FaEdit} from 'react-icons/fa';
+import { FaEdit } from 'react-icons/fa';
 import Posts from '../components/Posts';
-import { Post, posts as initialPosts } from '../data/PostsTest';
+import { Post } from '../hooks/usePosts';
 
+
+
+import { useUserContext } from '../data/UserContext';
+import { getUserPosts } from '../services/post-service';
 
 
 const ProfileView: React.FC = () => {
-    const [posts] = useState<Post[]>(initialPosts);
+    const { user } = useUserContext(); // Get logged-in user from context
+    const [userPosts, setUserPosts] = useState<Post[]>([]);
     const [isEditing, setIsEditing] = useState(false);
-    //const userName = "Yotam Gat"; // Replace with actual user name
-    const [userName, setUserName] = useState('Yotam Gat'); // Replace with actual user name
-    const loggedOwnerId: number = 1; 
-    const [avatar, setAvatar] = useState(userAvatar);
-    const handleEdit = (postId: number) => {
-        // Implement edit functionality
-    };
-   
+    const [userName, setUserName] = useState(user?.username || '');
+    const [avatar, setAvatar] = useState(user?.avatarUrl || '');
+
+    // Fetch user posts when the component mounts
+    useEffect(() => {
+        const fetchUserPosts = async () => {
+            try {
+                if (user) {
+                    const userId = localStorage.getItem('userId');
+                    if (userId) {
+                        const posts = await getUserPosts(userId);
+                        setUserPosts(posts);
+                    } else {
+                        console.error('User ID is null');
+                    }
+                    
+                
+                }
+            } catch (error) {
+                console.error('Error fetching user posts:', error);
+            }
+        };
+
+        fetchUserPosts();
+    }, [user]);
 
     const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -33,16 +53,14 @@ const ProfileView: React.FC = () => {
         // Implement save profile functionality
         setIsEditing(false);
     };
+
     const handleCancelEdit = () => {
-        // Reset the state and exit edit mode
-        setUserName('Yotam Gat'); // Reset to original user name
-        setAvatar(userAvatar); // Reset to original avatar
+        if (user) {
+            setUserName(user.username);
+            setAvatar(user.avatarUrl);
+        }
         setIsEditing(false);
     };
-    
-
-    const userPosts = posts.filter(post => post.ownerId === loggedOwnerId);
-
 
     return (
         <div className={styles.profileView}>
@@ -64,7 +82,7 @@ const ProfileView: React.FC = () => {
                                 onChange={handleAvatarChange}
                                 className={styles.avatarInput}
                             />
-                             <div className={styles.editButtons}>
+                            <div className={styles.editButtons}>
                                 <button onClick={handleSaveProfile} className={styles.saveButton}>
                                     Save
                                 </button>
@@ -84,14 +102,16 @@ const ProfileView: React.FC = () => {
                 </div>
                 <div className={styles.userPosts}>
                     <h2>My Posts</h2>
-                    <Posts posts={userPosts} />
+                    {userPosts.length > 0 ? (
+                        <Posts posts={userPosts} />
+                    ) : (
+                        <p>No posts to display.</p>
+                    )}
                 </div>
             </div>
             <Footer />
         </div>
     );
 };
-
-
 
 export default ProfileView;

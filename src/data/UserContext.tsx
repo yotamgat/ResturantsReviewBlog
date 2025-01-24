@@ -3,6 +3,7 @@ import React, { createContext, useState, useEffect, ReactNode, useContext } from
 import { getUserInfo } from '../services/user-service';
 
 interface User {
+    _id: string;
     username: string;
     avatarUrl: string;
 }
@@ -35,6 +36,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             if (userId) {
                 const user = await getUserInfo(userId);
                 setUser({
+                    _id: userId,
                     username: user.username,
                     avatarUrl: user.image,
                 });

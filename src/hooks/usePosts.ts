@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchPosts, likePost, editPost } from '../services/post-service';
 
+
 export interface Post {
     postId: number;
     userAvatar: string;
