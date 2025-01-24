@@ -2,10 +2,9 @@ import apiClient from './api-service';
 
 // Fetch all posts
 export const fetchPosts = async () => {
-    const response = await apiClient.get('/posts');
+    const response = await apiClient.get("/posts");
     return response.data;
 };
-
 // Like a post
 export const likePost = async (postId: number) => {
     const response = await apiClient.post(`/posts/${postId}/like`);
@@ -15,5 +14,35 @@ export const likePost = async (postId: number) => {
 // Edit a post
 export const editPost = async (postId: number, updatedContent: string) => {
     const response = await apiClient.put(`/posts/${postId}`, { content: updatedContent });
+    return response.data;
+};
+
+// Create a new post
+export const createPost = async (title: string, content: string,username:string, photo: File | null,userImg:string) => {
+    const formData = new FormData();
+    if (photo) {
+        formData.append('photo', photo);
+    }
+    const token = localStorage.getItem('accessToken');
+    const photoResponse = await apiClient.post('/posts/upload', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+   
+
+    const photoUrl = photoResponse.data.url;
+    const userId = localStorage.getItem('userId');
+    const postData = { title, content, photo: photoUrl, _id: userId,userImg,username };
+    console.log("PostData: ",postData);
+  
+
+    const response = await apiClient.post('/posts', postData, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+    });
+    console.log("Finel Response: ",response);
     return response.data;
 };

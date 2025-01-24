@@ -6,16 +6,16 @@ const apiClient = axios.create({
     baseURL: "http://localhost:3000", // Replace with your actual backend URL
     
     //timeout: 10000, // Timeout in milliseconds
-    //headers: {
-    //    'Content-Type': 'application/json',
-    //},
+    headers: {
+        'Content-Type': 'application/json',
+    },
 });
 
-// Add a request interceptor (e.g., add auth token)
+// Add Authorization dynamically for authenticated requests
 apiClient.interceptors.request.use(
     config => {
         // Add authorization token if available
-        const token = localStorage.getItem('authToken'); // Example: Retrieve token from localStorage
+        const token = localStorage.getItem('accessToken'); // Example: Retrieve token from localStorage
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

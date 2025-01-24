@@ -3,6 +3,7 @@ import { usePosts } from '../hooks/usePosts';
 import { FaThumbsUp, FaComment, FaEdit, FaTrash } from 'react-icons/fa';
 import styles from '../styles/Posts.module.css';
 import Comments from '../pages/Comments';
+import { useUserContext } from '../data/UserContext';
 
 const Posts: React.FC = () => {
     const { posts, loading, error, handleLike, handleEdit } = usePosts();
@@ -10,6 +11,7 @@ const Posts: React.FC = () => {
     const [showComments, setShowComments] = useState<{ [key: number]: boolean }>({});
     const [editingPostId, setEditingPostId] = useState<number | null>(null);
     const [newContent, setNewContent] = useState<string>('');
+    
 
     const handleComment = (id: number) => {
         setShowComments(prevState => ({
@@ -30,12 +32,18 @@ const Posts: React.FC = () => {
         <div className={styles.posts}>
             {posts.map(post => (
                 <div key={post.postId} className={styles.post}>
+                    {/* Post Header */}
                     <div className={styles.postHeader}>
-                        <img src={post.userAvatar} alt="User Avatar" className={styles.avatar} />
-                        <span className={styles.userName}>{post.userName}</span>
+                        <img src={post.userImg} alt="User Avatar" className={styles.avatar} />
+                        <span className={styles.userName}>{post.username}</span>
                     </div>
+
+                    {/* Post Body */}
                     <div className={styles.postBody}>
-                        <img src={post.photo} alt="Post" className={styles.postPhoto} />
+                        {/* Display photo if it exists */}
+                        {post.photo && (
+                            <img src={post.photo} alt="Post" className={styles.postPhoto} />
+                        )}
                         {editingPostId === post.postId ? (
                             <textarea
                                 value={newContent}
@@ -46,6 +54,8 @@ const Posts: React.FC = () => {
                             <p className={styles.postContent}>{post.content}</p>
                         )}
                     </div>
+
+                    {/* Post Footer */}
                     <div className={styles.postFooter}>
                         <div className={styles.postFooterLeft}>
                             <button onClick={() => handleLike(post.postId)} className={styles.actionButton}>
@@ -78,6 +88,8 @@ const Posts: React.FC = () => {
                             </div>
                         )}
                     </div>
+
+                    {/* Comments Section */}
                     {showComments[post.postId] && <Comments postId={post.postId} />}
                 </div>
             ))}

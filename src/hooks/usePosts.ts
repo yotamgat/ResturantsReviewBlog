@@ -4,12 +4,13 @@ import { fetchPosts, likePost, editPost } from '../services/post-service';
 export interface Post {
     postId: number;
     userAvatar: string;
-    userName: string;
+    username: string;
     photo: string;
     content: string;
     numOfLikes: number;
     numOfComments: number;
     ownerId: number;
+    userImg:string;
 }
 
 export const usePosts = () => {
@@ -61,3 +62,4 @@ export const usePosts = () => {
 
     return { posts, loading, error, handleLike, handleEdit };
 };
+

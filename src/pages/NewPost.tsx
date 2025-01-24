@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import { toast } from 'react-toastify';
 import Footer from '../components/Footer';
 import styles from '../styles/NewPost.module.css';
-import userAvatar from '../assets/avatar.png';
+import { createPost } from '../services/post-service';
+import { useUserContext } from '../data/UserContext';
+//import apiClient from '../services/api-service';
 
 const NewPost: React.FC = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [photo, setPhoto] = useState<File | null>(null);
     const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+    const { user } = useUserContext();
     const navigate = useNavigate();
 
     const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,11 +24,18 @@ const NewPost: React.FC = () => {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Implement post creation functionality
-        console.log({ title, content, photo });
-        navigate('/');
+    
+    
+        try {
+            await createPost(title, content, user?.username || '',  photo,user?.avatarUrl || '');
+            toast.success('Post created successfully!');
+            navigate('/');
+        } catch (error) {
+            toast.error('Failed to create post.');
+            console.error('Error while creating post:', error);
+        }
     };
 
     return (
@@ -33,8 +44,9 @@ const NewPost: React.FC = () => {
             <div className={styles.newPostContainer}>
                 <h2 style={{ textAlign: 'center' }}>Create New Post</h2>
                 <div className={styles.userInfo}>
-                    <img src={userAvatar} alt="User Avatar" className={styles.avatar} />
-                    <span className={styles.userName}>Yotam Gat</span> {/* Replace with actual user name */}
+                    
+                    <img src={user?.avatarUrl} alt="User Avatar" className={styles.avatar} />
+                    <span className={styles.userName}>{localStorage.getItem('username')}</span>
                 </div>
                 <form onSubmit={handleSubmit} className={styles.newPostForm}>
                     <div className={styles.formGroup}>
