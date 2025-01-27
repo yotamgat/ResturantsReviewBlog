@@ -1,38 +1,43 @@
-import React, { useState } from 'react';
-import userAvatar from '../assets/avatar.png';
+import React from 'react';
 import styles from '../styles/Comments.module.css';
-import { Comment, posts as initialComments } from '../data/CommentsTest';
+import { useComments } from '../hooks/useComments';
+
 
 
 interface CommentsProps {
-    postId: number;
+    comments?: Comment[];
+    postId: string;
 }
 
 const Comments: React.FC<CommentsProps> = ({ postId }) => {
 
-    // Initialize state with imported comments data
-    const [comments, setComments] = useState<Comment[]>(initialComments);
+    console.log("Entered Comments.tsx, postId: ",postId);
+    const { comments, isLoading, error } = useComments(postId);
 
-    // Filter comments for the given postId
-    const filteredComments = comments.filter(comment => comment.postId === postId);
+    if (isLoading) return <p>Loading comments...</p>;
+    if (error) return <p>Error loading comments: {error}</p>;
+
+    if (comments.length === 0) {
+        return <p>No comments yet. Be the first to comment!</p>;
+    }
    
     return (
-        <>
-            {filteredComments.length > 0 && (
-                <div className={styles.comments}>
-                    <h3>Comments:</h3>
-                    {filteredComments.map((comment: Comment) => (
-                        <div key={comment.ownerId} className={styles.comment}>
-                            <img src={comment.userAvatar} alt="User Avatar" className={styles.avatar} />
-                            <div>
-                                <span className={styles.userName}>{comment.userName}</span>
-                                <p className={styles.commentContent}>{comment.content}</p>
-                            </div>
-                        </div>
-                    ))}
+        <div className={styles.comments}>
+            <h3>Comments:</h3>
+            {comments.map((comment) => (
+                <div key={comment._id} className={styles.comment}>
+                    <img
+                        src={comment.userImg }
+                        alt="User Avatar"
+                        className={styles.avatar}
+                    />
+                    <div>
+                        <span className={styles.userName}>{comment.username}</span>
+                        <p className={styles.commentContent}>{comment.comment}</p>
+                    </div>
                 </div>
-            )}
-        </>
+            ))}
+        </div>
     );
 };
 

@@ -1,9 +1,9 @@
-
 import axios from 'axios';
+export const baseURL = 'http://localhost:3000';
 
 // Create an Axios instance
 const apiClient = axios.create({
-    baseURL: "http://localhost:3000", // Replace with your actual backend URL
+    baseURL: `${baseURL}`, // Replace with your actual backend URL
     
     //timeout: 10000, // Timeout in milliseconds
     headers: {

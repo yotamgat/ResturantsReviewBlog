@@ -4,6 +4,7 @@ import { FaThumbsUp, FaComment, FaEdit, FaTrash } from 'react-icons/fa';
 import styles from '../styles/Posts.module.css';
 import Comments from '../pages/Comments';
 import { Post } from '../hooks/usePosts';
+import { useUserContext } from '../data/UserContext';
 
 export interface PostsProps {
 
@@ -12,22 +13,25 @@ export interface PostsProps {
 }
 
 const Posts: React.FC<PostsProps> = ({posts}) => {
-    const {posts: allPosts, loading, error, handleLike, handleEdit } = usePosts();
-    const loggedOwnerId = 1; // Replace with actual logged-in user ID
-    const [showComments, setShowComments] = useState<{ [key: number]: boolean }>({});
-    const [editingPostId, setEditingPostId] = useState<number | null>(null);
+    const {posts: allPosts, loading, error, handleLike,userId } = usePosts();
+    const [showComments, setShowComments] = useState<{ [key: string]: boolean }>({});
+    const [editingPostId, setEditingPostId] = useState<string | null>(null);
     const [newContent, setNewContent] = useState<string>('');
+    //const [likedPosts] = useState<{ [key: string]: boolean }>({});
+    const {user} = useUserContext();
     
 
-    const handleComment = (id: number) => {
+    const handleComment = (id: string) => {
+        console.log("Toggling comments for postId: ", id);
         setShowComments(prevState => ({
             ...prevState,
             [id]: !prevState[id],
         }));
     };
+    
 
-    const handleSaveEdit = async (postId: number) => {
-        await handleEdit(postId, newContent);
+    const handleSaveEdit = async (postId: string) => {
+       // await handleEdit(postId, newContent);
         setEditingPostId(null); // Exit edit mode
     };
 
@@ -38,8 +42,10 @@ const Posts: React.FC<PostsProps> = ({posts}) => {
 
     return (
         <div className={styles.posts}>
-            {postsToRender.map((post) => (
-                <div key={post.postId} className={styles.post}>
+            {postsToRender.map((post) => {
+                const userHasLiked = post.likedBy.includes(userId || '');
+                return (
+                <div key={post._id} className={styles.post}>
                     {/* Post Header */}
                     <div className={styles.postHeader}>
                         <img src={post.userImg} alt="User Avatar" className={styles.avatar} />
@@ -52,7 +58,7 @@ const Posts: React.FC<PostsProps> = ({posts}) => {
                         {post.photo && (
                             <img src={post.photo} alt="Post" className={styles.postPhoto} />
                         )}
-                        {editingPostId === post.postId ? (
+                        {editingPostId === post._id ? (
                             <textarea
                                 value={newContent}
                                 onChange={e => setNewContent(e.target.value)}
@@ -66,23 +72,26 @@ const Posts: React.FC<PostsProps> = ({posts}) => {
                     {/* Post Footer */}
                     <div className={styles.postFooter}>
                         <div className={styles.postFooterLeft}>
-                            <button onClick={() => handleLike(post.postId)} className={styles.actionButton}>
+                            <button onClick={() => handleLike(post._id,user?._id || '')} className={styles.actionButton}
+                                style={{
+                                    color: userHasLiked ? 'red' : 'black', // Toggle like button color
+                                }}>
                                 <FaThumbsUp /> {post.numOfLikes}
                             </button>
-                            <button onClick={() => handleComment(post.postId)} className={styles.actionButton}>
+                            <button onClick={() => handleComment(post._id)} className={styles.actionButton}>
                                 <FaComment /> {post.numOfComments}
                             </button>
                         </div>
-                        {loggedOwnerId === post.ownerId && (
+                        {user?._id === post.owner && (
                             <div className={styles.postActions}>
-                                {editingPostId === post.postId ? (
-                                    <button onClick={() => handleSaveEdit(post.postId)} className={styles.actionButton}>
+                                {editingPostId === post._id ? (
+                                    <button onClick={() => handleSaveEdit(post._id)} className={styles.actionButton}>
                                         Save
                                     </button>
                                 ) : (
                                     <button
                                         onClick={() => {
-                                            setEditingPostId(post.postId);
+                                            setEditingPostId(post._id);
                                             setNewContent(post.content);
                                         }}
                                         className={styles.actionButton}
@@ -98,9 +107,11 @@ const Posts: React.FC<PostsProps> = ({posts}) => {
                     </div>
 
                     {/* Comments Section */}
-                    {showComments[post.postId] && <Comments postId={post.postId} />}
+                   
+                    {showComments[post._id] && <Comments postId={post._id} />}
                 </div>
-            ))}
+              );
+            })}
         </div>
     );
 };

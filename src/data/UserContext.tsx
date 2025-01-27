@@ -3,7 +3,7 @@ import React, { createContext, useState, useEffect, ReactNode, useContext } from
 import { getUserInfo } from '../services/user-service';
 
 interface User {
-    _id: string;
+    _id: string | undefined;
     username: string;
     avatarUrl: string;
 }

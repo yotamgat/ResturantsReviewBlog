@@ -7,7 +7,7 @@ export const fetchPosts = async () => {
     return response.data;
 };
 // Like a post
-export const likePost = async (postId: number) => {
+export const likePost = async (postId: string) => {
     const response = await apiClient.post(`/posts/${postId}/like`);
     return response.data;
 };
@@ -27,7 +27,7 @@ export const getUserPosts = async (userId: string) => {
 };
 
 // Edit a post
-export const editPost = async (postId: number, updatedContent: string) => {
+export const editPost = async (postId: string, updatedContent: string) => {
     const response = await apiClient.put(`/posts/${postId}`, { content: updatedContent });
     return response.data;
 };
@@ -57,5 +57,17 @@ export const createPost = async (title: string, content: string,username:string,
         },
     });
     console.log("Finel Response: ",response);
+    return response.data;
+};
+
+//Post update
+export const updatePost = async (postData:any, postId: string) => {
+    const token = localStorage.getItem('accessToken');
+    const response = await apiClient.put(`/posts/${postId}`, postData, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        }
+    });
     return response.data;
 };
