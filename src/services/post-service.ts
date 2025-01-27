@@ -26,11 +26,6 @@ export const getUserPosts = async (userId: string) => {
     return response.data;
 };
 
-// Edit a post
-export const editPost = async (postId: string, updatedContent: string) => {
-    const response = await apiClient.put(`/posts/${postId}`, { content: updatedContent });
-    return response.data;
-};
 
 // Create a new post
 export const createPost = async (title: string, content: string,username:string, photo: File | null,userImg:string) => {
@@ -60,10 +55,58 @@ export const createPost = async (title: string, content: string,username:string,
     return response.data;
 };
 
+//Post edit update
+export const editPost = async (postId: string,title: string, content: string,username:string, photo: File | null,userImg:string) => {
+    const formData = new FormData();
+    if (photo) {
+        formData.append('photo', photo);
+    }
+    const token = localStorage.getItem('accessToken');
+    const photoResponse = await apiClient.post('/posts/upload', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const photoUrl = photoResponse.data.url;
+    const userId = localStorage.getItem('userId');
+    const postData = { title, content, photo: photoUrl, _id: userId,userImg,username };
+    console.log("PostData: ",postData);
+  
+
+    const response = await apiClient.put(`/posts/edit/${postId}`, postData, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+    });
+    console.log("Finel Response: ",response);
+    return response.data;
+};
 //Post update
 export const updatePost = async (postData:any, postId: string) => {
+    console.log("Entered updatePost");
+    console.log("PostData: ",postData);
     const token = localStorage.getItem('accessToken');
     const response = await apiClient.put(`/posts/${postId}`, postData, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        }
+    });
+    console.log("Response updatePost: ",response);
+    return response.data;
+};
+
+//Get post by Id
+export const getPostById = async (postId: string) => {
+    const response = await apiClient.get(`/posts/${postId}`);
+    return response.data;
+};
+
+//Delete post
+export const deletePost = async (postId: string) => {
+    const token = localStorage.getItem('accessToken');
+    const response = await apiClient.delete(`/posts/${postId}`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`

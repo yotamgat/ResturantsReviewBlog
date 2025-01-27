@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { usePosts } from '../hooks/usePosts';
+import { useNavigate } from 'react-router-dom';
 import { FaThumbsUp, FaComment, FaEdit, FaTrash } from 'react-icons/fa';
 import styles from '../styles/Posts.module.css';
 import Comments from '../pages/Comments';
 import { Post } from '../hooks/usePosts';
 import { useUserContext } from '../data/UserContext';
+
 
 export interface PostsProps {
 
@@ -13,12 +15,12 @@ export interface PostsProps {
 }
 
 const Posts: React.FC<PostsProps> = ({posts}) => {
-    const {posts: allPosts, loading, error, handleLike,userId } = usePosts();
+    const {posts: allPosts, loading, error, handleLike, userId,handleDeletePost, setPosts } = usePosts();
     const [showComments, setShowComments] = useState<{ [key: string]: boolean }>({});
     const [editingPostId, setEditingPostId] = useState<string | null>(null);
     const [newContent, setNewContent] = useState<string>('');
-    //const [likedPosts] = useState<{ [key: string]: boolean }>({});
     const {user} = useUserContext();
+    const navigate = useNavigate();
     
 
     const handleComment = (id: string) => {
@@ -28,13 +30,13 @@ const Posts: React.FC<PostsProps> = ({posts}) => {
             [id]: !prevState[id],
         }));
     };
-    
 
-    const handleSaveEdit = async (postId: string) => {
-       // await handleEdit(postId, newContent);
-        setEditingPostId(null); // Exit edit mode
+    const handleEditPost = (postId: string) => {
+        navigate(`/edit-post/${postId}`);
     };
-
+    const handleSaveEdit = async () => {
+        //implament
+    }
     const postsToRender = posts || allPosts; // Use the `posts` prop if passed, otherwise use `allPosts`
 
     if (loading) return <div>Loading posts...</div>;
@@ -85,21 +87,20 @@ const Posts: React.FC<PostsProps> = ({posts}) => {
                         {user?._id === post.owner && (
                             <div className={styles.postActions}>
                                 {editingPostId === post._id ? (
-                                    <button onClick={() => handleSaveEdit(post._id)} className={styles.actionButton}>
+                                    <button onClick={() => handleSaveEdit()} className={styles.actionButton}>
                                         Save
                                     </button>
                                 ) : (
                                     <button
-                                        onClick={() => {
-                                            setEditingPostId(post._id);
-                                            setNewContent(post.content);
-                                        }}
+                                        onClick={() => {handleEditPost(post._id);}}
                                         className={styles.actionButton}
                                     >
                                         <FaEdit />
                                     </button>
                                 )}
-                                <button className={styles.actionButton}>
+                                <button
+                                 onClick={() => handleDeletePost(post._id)}
+                                 className={styles.actionButton}>
                                     <FaTrash />
                                 </button>
                             </div>

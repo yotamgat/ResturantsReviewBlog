@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { fetchPosts, likePost, editPost } from '../services/post-service';
+import { fetchPosts } from '../services/post-service';
 import apiClient from '../services/api-service';
 import { useUserContext } from '../data/UserContext';
+import { deletePost } from '../services/post-service';
 
 
 export interface Post {
@@ -88,19 +89,20 @@ export const usePosts = () => {
     };
 
 
-    const handleEdit = async (postId: string, updatedContent: string) => {
+  
+
+    const handleDeletePost = async (postId: string) => {
+        const confirmDelete = window.confirm('Are you sure you want to delete this post?');
+        if (!confirmDelete) return;
         try {
-            const updatedPost = await editPost(postId, updatedContent);
-            setPosts(prevPosts =>
-                prevPosts.map(post =>
-                    post._id === postId ? { ...post, content: updatedPost.content } : post
-                )
-            );
-        } catch (err) {
-            console.error('Failed to edit post:', err);
+            await deletePost(postId);
+            setPosts(prevPosts => prevPosts.filter(post => post._id !== postId));
+        } catch (error) {
+            console.error('Error deleting post:', error);
+            setError('Failed to delete post');
         }
     };
 
-    return { posts, loading, error, handleLike, userId };
+    return { posts, loading, error, handleLike, userId,handleDeletePost,setPosts };
 };
 

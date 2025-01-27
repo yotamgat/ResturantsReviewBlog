@@ -18,6 +18,8 @@ export const fetchComments = async (postId: string) => {
 
 // Post a new comment with middleware
 export const postComment = async (comment: Comment) => {
+    console.log("Entered postComment");
+    console.log("PostComment: ",comment);
     const token = localStorage.getItem('accessToken');
     const response = await apiClient.post('/comments', comment, {
         headers: {
@@ -30,8 +32,22 @@ export const postComment = async (comment: Comment) => {
 
 //Update a comment
 export const updateComment = async (commentData:any, commentId: string) => {
+    console.log("Entered updateComment");
     const token = localStorage.getItem('accessToken');
     const response = await apiClient.put(`/comments/${commentId}`, commentData, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    return response.data;
+};
+
+// Delete a comment
+export const deleteComment = async (commentId: string) => {
+    console.log("Entered deleteComment");
+    const token = localStorage.getItem('accessToken');
+    const response = await apiClient.delete(`/comments/${commentId}`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`

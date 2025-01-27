@@ -126,7 +126,7 @@ const ProfileView: React.FC = () => {
                     owner: post.owner,
                 };
                
-
+                
                await updatePost(postData, post._id);
                 
             });
@@ -141,7 +141,7 @@ const ProfileView: React.FC = () => {
                     username: newName ? newName : user?.username,
                 };
                 if(comment.owner === user?._id){
-                    await updateComment(commentData, comment._id);
+                    await updateComment(commentData, comment._id as string);
                 }
             });
         } catch (error) {

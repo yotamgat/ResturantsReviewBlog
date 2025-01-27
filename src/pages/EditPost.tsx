@@ -1,20 +1,36 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import { toast } from 'react-toastify';
 import Footer from '../components/Footer';
 import styles from '../styles/NewPost.module.css';
-import { createPost } from '../services/post-service';
+import { getPostById, editPost } from '../services/post-service';
 import { useUserContext } from '../data/UserContext';
-//import apiClient from '../services/api-service';
 
-const NewPost: React.FC = () => {
+const EditPost: React.FC = () => {
+    const { postId } = useParams<{ postId: string }>();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [photo, setPhoto] = useState<File | null>(null);
     const [photoPreview, setPhotoPreview] = useState<string | null>(null);
     const { user } = useUserContext();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchPost = async () => {
+            try {
+                const post = await getPostById(postId as string);
+                setTitle(post.title);
+                setContent(post.content);
+                setPhotoPreview(post.photo);
+            } catch (error) {
+                console.error('Error fetching post:', error);
+                toast.error('Failed to fetch post data.');
+            }
+        };
+
+        fetchPost();
+    }, [postId]);
 
     const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -26,15 +42,16 @@ const NewPost: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-    
-    
+
         try {
-            await createPost(title, content, user?.username || '',  photo,user?.avatarUrl || '');
-            toast.success('Post created successfully!');
+            console.log("Entered handleSubmit");
+
+            await editPost(postId as string,title, content, user?.username || '',  photo,user?.avatarUrl || '');
+            toast.success('Post updated successfully!');
             navigate('/');
         } catch (error) {
-            toast.error('Failed to create post.');
-            console.error('Error while creating post:', error);
+            toast.error('Failed to update post.');
+            console.error('Error while updating post:', error);
         }
     };
 
@@ -42,9 +59,8 @@ const NewPost: React.FC = () => {
         <div>
             <Header />
             <div className={styles.newPostContainer}>
-                <h2 style={{ textAlign: 'center' }}>Create New Post</h2>
+                <h2 style={{ textAlign: 'center' }}>Edit Post</h2>
                 <div className={styles.userInfo}>
-                    
                     <img src={user?.avatarUrl} alt="User Avatar" className={styles.avatar} />
                     <span className={styles.userName}>{user?.username}</span>
                 </div>
@@ -82,7 +98,7 @@ const NewPost: React.FC = () => {
                             <img src={photoPreview} alt="Photo Preview" />
                         </div>
                     )}
-                    <button type="submit" className={styles.submitButton}>Submit</button>
+                    <button type="submit" className={styles.submitButton}>Update</button>
                 </form>
             </div>
             <Footer />
@@ -90,4 +106,4 @@ const NewPost: React.FC = () => {
     );
 };
 
-export default NewPost;
+export default EditPost;
