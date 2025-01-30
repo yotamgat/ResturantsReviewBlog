@@ -1,5 +1,5 @@
 .newPostContainer {
-    max-width: 600px;
+    max-width: 800px;
     margin: 100px auto; /* Adjusted margin to account for the header */
     padding: 20px;
     border: 1px solid #ccc;
@@ -75,4 +75,37 @@
 
 .submitButton:hover {
     background-color: #0056b3;
+}
+
+.generateButton {
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 10px;
+}
+
+.generateButton:hover {
+    background-color: #0056b3;
+}
+
+.generateButton:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Add a loading effect */
+.loading {
+    background-color: #ff9800 !important;
+    cursor: wait;
+}
+.quillEditor {
+    height: 300px;  /* Adjust height */
+    max-height: 300px; /* Prevent it from getting too large */
+    overflow-y:auto /* Enables scrolling */
 }

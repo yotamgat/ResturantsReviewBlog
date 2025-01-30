@@ -14,18 +14,23 @@ import { updateUser } from '../services/auth-service';
 import { updateComment } from '../services/comment-service';
 import { updatePost } from '../services/post-service';
 
+import { usePosts } from '../hooks/usePosts';
+
+
 
 
 const ProfileView: React.FC = () => {
-    const { user, setUser } = useUserContext(); // Get logged-in user from context
+    const { user} = useUserContext(); // Get logged-in user from context
     const [userPosts, setUserPosts] = useState<Post[]>([]);
     const [isEditing, setIsEditing] = useState(false);
-    const [userName, setUserName] = useState(user?.username || '');
+    const [userName] = useState(user?.username || '');
     const [avatar, setAvatar] = useState<File | string>(user?.avatarUrl || '');
-    const [previewImage, setPreviewImage] = useState<string>(baseURL + user?.avatarUrl || '');
-    const [comments, setComments] = useState<Comment[]>([]); // State for storing comments
+    const [, setPreviewImage] = useState<string>(baseURL + user?.avatarUrl || '');
+    const [comments] = useState<Comment[]>([]); // State for storing comments
     const [newName, setNewName] = useState(userName);
     const [newImage, setNewImage] = useState<File | string |null>(avatar);
+    const { handleLike } = usePosts(); // Get handleLike and posts
+    
     
 
     
@@ -61,6 +66,8 @@ const ProfileView: React.FC = () => {
             setPreviewImage(URL.createObjectURL(file));
         }
     };
+
+    
 
 
     const handleSaveProfile = async () => {
@@ -126,7 +133,7 @@ const ProfileView: React.FC = () => {
                     owner: post.owner,
                 };
                
-                
+
                await updatePost(postData, post._id);
                 
             });
@@ -144,6 +151,8 @@ const ProfileView: React.FC = () => {
                     await updateComment(commentData, comment._id as string);
                 }
             });
+            // Refresh the page
+            window.location.reload();
         } catch (error) {
             console.error('Error uploading profile image:', error);
             toast.error('Failed to upload profile image');
@@ -192,7 +201,7 @@ const ProfileView: React.FC = () => {
                         </>
                     ) : (
                         <>
-                            <h2 className={styles.userName}>{userName}</h2>
+                            <h2 className={styles.userName}>{user?.username}</h2>
                             <button onClick={() => setIsEditing(true)} className={styles.editButton}>
                                 <FaEdit /> Edit Profile
                             </button>
@@ -202,7 +211,7 @@ const ProfileView: React.FC = () => {
                 <div className={styles.userPosts}>
                     <h2>My Posts</h2>
                     {userPosts.length > 0 ? (
-                        <Posts posts={userPosts} />
+                        <Posts posts={userPosts} handleLike={handleLike}  />
                     ) : (
                         <p>No posts to display.</p>
                     )}

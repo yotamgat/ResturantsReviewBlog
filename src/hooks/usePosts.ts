@@ -17,6 +17,9 @@ export interface Post {
     owner: string;
     userImg:string;
     likedBy: string[];
+    createdAt: Date;
+    
+    
 }
 
 export const usePosts = () => {
@@ -61,14 +64,9 @@ export const usePosts = () => {
                 },
             });
             if (response.status === 200) {
-                console.log("Response handleLike: ",response);
-               // const { numOfLikes, likedBy } = response.data;
+
                 const numOfLikes = response.data.post.numOfLikes;
                 const likedBy = response.data.post.likedBy;
-                console.log("response.data.likedBy: ",response.data.post.likedBy);
-                console.log("response.data.numOfLikes",response.data.post.numOfLikes)
-             
-
                 setPosts((prevPosts) =>
                     prevPosts.map((post) =>
                         post._id === postId

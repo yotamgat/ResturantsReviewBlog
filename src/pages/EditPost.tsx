@@ -6,6 +6,10 @@ import Footer from '../components/Footer';
 import styles from '../styles/NewPost.module.css';
 import { getPostById, editPost } from '../services/post-service';
 import { useUserContext } from '../data/UserContext';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // Import Quill's styles
+
+
 
 const EditPost: React.FC = () => {
     const { postId } = useParams<{ postId: string }>();
@@ -77,11 +81,12 @@ const EditPost: React.FC = () => {
                     </div>
                     <div className={styles.formGroup}>
                         <label htmlFor="content">Content:</label>
-                        <textarea
-                            id="content"
+                        <ReactQuill
+                            theme="snow"
                             value={content}
-                            onChange={(e) => setContent(e.target.value)}
-                            required
+                            onChange={setContent} // Directly set content state
+                            placeholder="Write your post here..."
+                            //className={styles.quillEditor} // Use CSS class
                         />
                     </div>
                     <div className={styles.formGroup}>

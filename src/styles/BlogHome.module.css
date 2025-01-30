@@ -18,5 +18,36 @@
 }
 
 .posts {
-    margin-top: 20px;
+    width: 100%;
+    max-width: 1000px;
+    margin: 20px auto;
+}
+
+/* Sorting container */
+.sortContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Styling the dropdown */
+.sortContainer select {
+    padding: 8px 12px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    background-color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Hover and focus effects */
+.sortContainer select:hover,
+.sortContainer select:focus {
+    border-color: #0056b3;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
