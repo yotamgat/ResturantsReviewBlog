@@ -15,7 +15,7 @@ const BlogHome: React.FC = () => {
         <div className={styles.homePage}>
             <Header showNewPostButton={true} />
             <section className={styles.posts}>
-                <h2>All Posts</h2>
+              
 
                 {/* Sorting Dropdown */}
                 <div className={styles.sortContainer}>

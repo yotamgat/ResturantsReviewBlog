@@ -23,7 +23,7 @@ const Login: React.FC = () => {
 
 
     return (
-        <div>
+        <div className={styles.loginPage}>
             <Header />
             <div className={styles.loginContainer}>
                 <h2>Login</h2>

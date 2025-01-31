@@ -11,7 +11,7 @@ const Register: React.FC = () => {
         useRegister();
 
     return (
-        <div>
+        <div className={styles.registerPage}>
             <Header />
             <div className={styles.registerContainer}>
                 <h2>Register</h2>

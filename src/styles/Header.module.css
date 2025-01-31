@@ -7,7 +7,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #fff;
+    background-color: #2a393f;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1000; /* Ensure the header is above other content */
 }
@@ -15,6 +15,7 @@
 .left {
     display: flex;
     align-items: center;
+    color: #fff;
 }
 
 .right {
@@ -26,6 +27,11 @@
     margin-right: 20px;
     font-size: 1.5rem;
 }
+.logo {
+    width: 100px;
+    height: auto;
+}
+
 
 .newPostButton {
     padding: 10px 20px;
@@ -47,7 +53,7 @@
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: #333;
+    color: #f4eded;
     margin-right: 20px;
 }
 
@@ -56,8 +62,8 @@
 }
 
 .avatar {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 45px;
     border-radius: 50%;
 }
 

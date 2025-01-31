@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaHome } from 'react-icons/fa';
 import styles from '../styles/Header.module.css';
+import logo from '../assets/BloggerLogo.png';
 import { useUserContext } from '../data/UserContext';
 
 interface HeaderProps {
@@ -54,7 +55,7 @@ const Header: React.FC<HeaderProps> = ({ showNewPostButton })=> {
     return (
         <header className={styles.header}>
             <div className={styles.left}>
-                <h1>Res Blog</h1>
+                <img src={logo} alt="Blogger Logo" className={styles.logo} />
             </div>
             <div className={styles.right}>
                 <Link to="/" className={styles.homeButton}>

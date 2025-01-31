@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { fetchComments} from "../services/comment-service";
 import { deleteComment } from "../services/comment-service";
+import { toast } from 'react-toastify';
 
 
 
@@ -43,6 +44,7 @@ export const useComments = (postId: string) => {
             await deleteComment(commentId);
             // Remove the deleted comment from the state
             setComments(prevComments => prevComments.filter(comment => comment._id !== commentId));
+            toast.success('Comment deleted successfully!');
             console.log(`Comment with ID ${commentId} deleted successfully.`);
         } catch (error) {
             console.error('Error deleting comment:', error);

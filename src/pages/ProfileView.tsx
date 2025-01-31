@@ -184,8 +184,12 @@ const ProfileView: React.FC = () => {
                                 onChange={(e) => setNewName(e.target.value)}
                                 className={styles.userNameInput}
                             />
+                            <label htmlFor="avatarInput" className={styles.avatarInputLabel}>
+                                Change Avatar
+                            </label>
                             <input
                                 type="file"
+                                id="avatarInput"
                                 accept="image/*"
                                 onChange={handleAvatarChange}
                                 className={styles.avatarInput}

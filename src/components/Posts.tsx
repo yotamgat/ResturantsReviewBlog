@@ -76,102 +76,100 @@ const Posts: React.FC<PostsProps> = ({posts, sortBy,handleLike}) => {
 
     return (
         <div className={styles.posts}>
-          {/* Render current posts */}
-          {currentPosts.map((post) => {
+        {currentPosts.map((post) => {
             const userHasLiked = post.likedBy.includes(userId || '');
             return (
-              <div key={post._id} className={styles.post}>
-                {/* Post Header */}
-                <div className={styles.postHeader}>
-                  <img src={post.userImg} alt="User Avatar" className={styles.avatar} />
-                  <span className={styles.userName}>{post.username}</span>
-                </div>
-    
-                {/* Post Body */}
-                <div className={styles.postBody}>
-                  {post.photo && <img src={post.photo} alt="Post" className={styles.postPhoto} />}
-                  {editingPostId === post._id ? (
-                    <textarea
-                      value={newContent}
-                      onChange={(e) => setNewContent(e.target.value)}
-                      className={styles.editTextarea}
-                    />
-                  ) : (
-                    <div 
-                        className={styles.postContent} 
-                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }} 
-                    />
-                  )}
-                </div>
-    
-                {/* Post Footer */}
-                <div className={styles.postFooter}>
-                  <div className={styles.postFooterLeft}>
-                    <button
-                      onClick={() => handleLike(post._id, user?._id || '')}
-                      className={styles.actionButton}
-                      style={{
-                        color: userHasLiked ? 'red' : 'black', // Toggle like button color
-                      }}
-                    >
-                      <FaThumbsUp /> {post.numOfLikes}
-                    </button>
-                    <button onClick={() => handleComment(post._id)} className={styles.actionButton}>
-                      <FaComment /> {post.numOfComments}
-                    </button>
-                  </div>
-                  {user?._id === post.owner && (
-                    <div className={styles.postActions}>
-                      {editingPostId === post._id ? (
-                        <button className={styles.actionButton}>Save</button>
-                      ) : (
-                        <button onClick={() => handleEditPost(post._id)} className={styles.actionButton}>
-                          <FaEdit />
-                        </button>
-                      )}
-                      <button onClick={() => handleDeletePost(post._id)} className={styles.actionButton}>
-                        <FaTrash />
-                      </button>
+                <div key={post._id} className={styles.post}>
+                    {/* Post Header */}
+                    <div className={styles.postHeader}>
+                        <img src={post.userImg} alt="User Avatar" className={styles.avatar} />
+                        <span className={styles.userName}>{post.username}</span>
                     </div>
-                  )}
-                </div>
-    
-                {/* Comments Section */}
-                {showComments[post._id] && <Comments postId={post._id} />}
-              </div>
-            );
-          })}
-            {/* Pagination Controls */}
-            <div className={styles.pagination}>
-                {/* Previous Button */}
-                <button
-                    onClick={() => goToPage(currentPage - 1)}
-                    disabled={currentPage === 1}
-                >
-                    Previous
-                </button>
 
-                {/* Page Numbers */}
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <button
+                    {/* Post Title */}
+                    <h2 className={styles.postTitle}>{post.title}</h2>
+
+                    {/* Post Timestamp */}
+                    <p className={styles.postTime}>
+                        Posted on {new Date(post.createdAt).toLocaleString()}
+                    </p>
+
+                    {/* Post Body */}
+                    <div className={styles.postBody}>
+                        {post.photo && <img src={post.photo} alt="Post" className={styles.postPhoto} />}
+                        {editingPostId === post._id ? (
+                            <textarea
+                                value={newContent}
+                                onChange={(e) => setNewContent(e.target.value)}
+                                className={styles.editTextarea}
+                            />
+                        ) : (
+                            <div
+                                className={styles.postContent}
+                                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+                            />
+                        )}
+                    </div>
+
+                    {/* Post Footer */}
+                    <div className={styles.postFooter}>
+                        <div className={styles.postFooterLeft}>
+                            <button
+                                onClick={() => handleLike(post._id, user?._id || '')}
+                                className={styles.actionButton}
+                                style={{
+                                    color: userHasLiked ? 'red' : 'black',
+                                }}
+                            >
+                                <FaThumbsUp /> {post.numOfLikes}
+                            </button>
+                            <button onClick={() => handleComment(post._id)} className={styles.actionButton}>
+                                <FaComment /> {post.numOfComments}
+                            </button>
+                        </div>
+                        {/* Post Actions - Now at the Top Right */}
+                        {user?._id === post.owner && (
+                            <div className={styles.postActionsTopRight}>
+                                {editingPostId === post._id ? (
+                                    <button className={styles.actionButton}>Save</button>
+                                ) : (
+                                    <button onClick={() => handleEditPost(post._id)} className={styles.actionButton}>
+                                        <FaEdit />
+                                    </button>
+                                )}
+                                <button onClick={() => handleDeletePost(post._id)} className={styles.actionButton}>
+                                    <FaTrash />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Comments Section */}
+                    {showComments[post._id] && <Comments postId={post._id} />}
+                </div>
+            );
+        })}
+
+        {/* Pagination Controls */}
+        <div className={styles.pagination}>
+            <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
+                Previous
+            </button>
+            {Array.from({ length: totalPages }, (_, index) => (
+                <button
                     key={index}
                     onClick={() => goToPage(index + 1)}
                     className={currentPage === index + 1 ? styles.activePage : ''}
-                    >
-                    {index + 1}
-                    </button>
-                ))}
-
-                {/* Next Button */}
-                <button
-                    onClick={() => goToPage(currentPage + 1)}
-                    disabled={currentPage === totalPages}
                 >
-                    Next
+                    {index + 1}
                 </button>
-            </div>
+            ))}
+            <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
+                Next
+            </button>
         </div>
-    );
+    </div>
+);
 };
 
 export default Posts;

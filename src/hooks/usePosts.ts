@@ -3,6 +3,7 @@ import { fetchPosts } from '../services/post-service';
 import apiClient from '../services/api-service';
 import { useUserContext } from '../data/UserContext';
 import { deletePost } from '../services/post-service';
+import { toast } from 'react-toastify';
 
 
 export interface Post {
@@ -95,6 +96,8 @@ export const usePosts = () => {
         try {
             await deletePost(postId);
             setPosts(prevPosts => prevPosts.filter(post => post._id !== postId));
+            toast.success('Post Deleted Successfully');
+            window.location.reload(); // Refresh the page
         } catch (error) {
             console.error('Error deleting post:', error);
             setError('Failed to delete post');

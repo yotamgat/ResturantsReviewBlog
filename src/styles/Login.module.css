@@ -1,3 +1,13 @@
+.loginPage {
+  
+    position: relative; /* Ensures the absolute positioning of child elements */
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #dbdbdb;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
 .loginContainer {
     max-width: 400px;
     margin: 100px auto; /* Adjusted margin to account for the header */
@@ -9,6 +19,7 @@
 }
 
 .loginForm {
+    
     display: flex;
     flex-direction: column;
 }

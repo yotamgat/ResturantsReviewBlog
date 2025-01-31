@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import NewPost from './pages/NewPost';
 
+
 const App: React.FC = () => {
     return (
         <Router>

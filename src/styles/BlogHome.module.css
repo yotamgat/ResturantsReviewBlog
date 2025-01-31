@@ -1,4 +1,5 @@
 .homePage {
+    background-color: #dbdbdb;
     font-family: Arial, sans-serif;
     padding: 20px;
     padding-top: 80px; /* Adjust this value to match the height of the header */
@@ -28,7 +29,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     font-size: 16px;
     font-weight: bold;
 }
